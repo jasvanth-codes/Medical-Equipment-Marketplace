@@ -1,0 +1,416 @@
+.admin-page {
+min-height: 100vh;
+background: #f4f7fb;
+padding: 40px 20px 70px;
+}
+
+.admin-container {
+max-width: 1200px;
+margin: 0 auto;
+}
+
+/* Header */
+
+.admin-header {
+background: #ffffff;
+border: 1px solid #e8edf5;
+border-radius: 18px;
+padding: 30px 32px;
+margin-bottom: 25px;
+display: flex;
+justify-content: space-between;
+align-items: center;
+box-shadow: 0 5px 20px rgba(0, 0, 0, 0.06);
+}
+
+.admin-label {
+display: inline-block;
+color: #64748b;
+font-size: 12px;
+font-weight: 700;
+letter-spacing: 1px;
+margin-bottom: 8px;
+}
+
+.admin-header h1 {
+margin: 0 0 8px;
+color: #0f172a;
+font-size: 30px;
+}
+
+.admin-header p {
+margin: 0;
+color: #64748b;
+font-size: 14px;
+}
+
+.manage-orders-btn {
+display: inline-flex;
+align-items: center;
+gap: 9px;
+background: #2563eb;
+color: #ffffff;
+text-decoration: none;
+padding: 13px 18px;
+border-radius: 10px;
+font-size: 14px;
+font-weight: 700;
+transition: 0.25s ease;
+}
+
+.manage-orders-btn:hover {
+background: #1d4ed8;
+transform: translateY(-1px);
+}
+
+/* Statistics */
+
+.admin-stats-grid {
+display: grid;
+grid-template-columns: repeat(4, 1fr);
+gap: 18px;
+margin-bottom: 25px;
+}
+
+.admin-stat-card {
+background: #ffffff;
+border: 1px solid #e8edf5;
+border-radius: 16px;
+padding: 22px;
+display: flex;
+align-items: center;
+gap: 15px;
+box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+}
+
+.admin-stat-icon {
+width: 48px;
+height: 48px;
+border-radius: 13px;
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 19px;
+}
+
+.admin-stat-icon.blue {
+background: #dbeafe;
+color: #2563eb;
+}
+
+.admin-stat-icon.green {
+background: #dcfce7;
+color: #16a34a;
+}
+
+.admin-stat-icon.orange {
+background: #ffedd5;
+color: #ea580c;
+}
+
+.admin-stat-icon.purple {
+background: #f3e8ff;
+color: #9333ea;
+}
+
+.admin-stat-card span {
+display: block;
+color: #64748b;
+font-size: 13px;
+margin-bottom: 5px;
+}
+
+.admin-stat-card h2 {
+margin: 0;
+color: #0f172a;
+font-size: 24px;
+}
+
+/* Main Content */
+
+.admin-content-grid {
+display: grid;
+grid-template-columns: minmax(0, 1fr) 320px;
+gap: 25px;
+align-items: start;
+}
+
+.admin-recent-orders,
+.admin-order-summary {
+background: #ffffff;
+border: 1px solid #e8edf5;
+border-radius: 18px;
+padding: 28px;
+box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+}
+
+.section-header {
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding-bottom: 20px;
+margin-bottom: 8px;
+border-bottom: 1px solid #e8edf5;
+}
+
+.section-header h2,
+.admin-order-summary h2 {
+margin: 0 0 5px;
+color: #0f172a;
+font-size: 21px;
+}
+
+.section-header p {
+margin: 0;
+color: #64748b;
+font-size: 13px;
+}
+
+.section-header a {
+display: inline-flex;
+align-items: center;
+gap: 7px;
+color: #2563eb;
+font-size: 13px;
+font-weight: 700;
+text-decoration: none;
+}
+
+/* Recent Orders */
+
+.recent-orders-list {
+display: flex;
+flex-direction: column;
+}
+
+.recent-order-item {
+display: flex;
+align-items: center;
+gap: 14px;
+padding: 18px 0;
+border-bottom: 1px solid #edf1f7;
+}
+
+.recent-order-item:last-child {
+border-bottom: none;
+}
+
+.recent-order-icon {
+width: 43px;
+height: 43px;
+min-width: 43px;
+background: #eff6ff;
+color: #2563eb;
+border-radius: 11px;
+display: flex;
+align-items: center;
+justify-content: center;
+}
+
+.recent-order-info {
+flex: 1;
+}
+
+.recent-order-info h3 {
+margin: 0 0 5px;
+color: #0f172a;
+font-size: 15px;
+}
+
+.recent-order-info span {
+color: #64748b;
+font-size: 13px;
+}
+
+.recent-order-right {
+text-align: right;
+}
+
+.recent-order-right strong {
+display: block;
+color: #0f172a;
+font-size: 15px;
+margin-bottom: 6px;
+}
+
+/* Status */
+
+.order-status-badge {
+display: inline-block;
+padding: 5px 9px;
+border-radius: 20px;
+font-size: 11px;
+font-weight: 700;
+}
+
+.status-confirmed {
+background: #dbeafe;
+color: #2563eb;
+}
+
+.status-processing {
+background: #ffedd5;
+color: #ea580c;
+}
+
+.status-delivered {
+background: #dcfce7;
+color: #16a34a;
+}
+
+.status-cancelled {
+background: #fee2e2;
+color: #dc2626;
+}
+
+/* Empty State */
+
+.admin-empty-state {
+text-align: center;
+padding: 55px 20px;
+}
+
+.admin-empty-state svg {
+font-size: 42px;
+color: #94a3b8;
+}
+
+.admin-empty-state h3 {
+color: #0f172a;
+margin: 15px 0 7px;
+}
+
+.admin-empty-state p {
+color: #64748b;
+margin: 0;
+font-size: 14px;
+}
+
+/* Overview */
+
+.admin-order-summary {
+position: sticky;
+top: 25px;
+}
+
+.admin-order-summary h2 {
+padding-bottom: 20px;
+margin-bottom: 5px;
+border-bottom: 1px solid #e8edf5;
+}
+
+.overview-item {
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding: 16px 0;
+border-bottom: 1px solid #edf1f7;
+color: #475569;
+font-size: 14px;
+}
+
+.overview-item > div {
+display: flex;
+align-items: center;
+gap: 9px;
+}
+
+.overview-item strong {
+color: #0f172a;
+font-size: 16px;
+}
+
+.overview-dot {
+width: 9px;
+height: 9px;
+border-radius: 50%;
+}
+
+.overview-dot.confirmed {
+background: #2563eb;
+}
+
+.overview-dot.processing {
+background: #ea580c;
+}
+
+.overview-dot.delivered {
+background: #16a34a;
+}
+
+.overview-dot.cancelled {
+background: #dc2626;
+}
+
+.overview-button {
+width: 100%;
+margin-top: 22px;
+padding: 13px;
+box-sizing: border-box;
+background: #f8fafc;
+color: #2563eb;
+border: 1px solid #dbeafe;
+border-radius: 10px;
+text-decoration: none;
+font-size: 14px;
+font-weight: 700;
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 8px;
+transition: 0.25s ease;
+}
+
+.overview-button:hover {
+background: #eff6ff;
+}
+
+/* Responsive */
+
+@media (max-width: 1000px) {
+.admin-stats-grid {
+grid-template-columns: repeat(2, 1fr);
+}
+
+.admin-content-grid {
+grid-template-columns: 1fr;
+}
+
+.admin-order-summary {
+position: static;
+}
+}
+
+@media (max-width: 650px) {
+.admin-page {
+padding: 25px 14px 50px;
+}
+
+.admin-header {
+padding: 24px;
+flex-direction: column;
+align-items: flex-start;
+gap: 20px;
+}
+
+.admin-header h1 {
+font-size: 25px;
+}
+
+.admin-stats-grid {
+grid-template-columns: 1fr;
+}
+
+.admin-recent-orders,
+.admin-order-summary {
+padding: 20px;
+}
+
+.recent-order-item {
+align-items: flex-start;
+}
+
+.recent-order-right {
+font-size: 12px;
+}
+}

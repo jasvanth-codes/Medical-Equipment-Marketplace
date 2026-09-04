@@ -1,0 +1,9 @@
+.filter-sidebar{
+margin-bottom:20px;
+}
+
+.filter-sidebar select{
+padding:10px;
+border-radius:6px;
+font-size:16px;
+}

@@ -1,0 +1,144 @@
+﻿.about {
+  width: 100%;
+  padding: 90px 0;
+  background: #ffffff;
+  box-sizing: border-box;
+}
+
+.about > h1 {
+  width: min(1180px, calc(100% - 48px));
+  margin: 0 auto 45px;
+  color: #0f172a;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+}
+
+.about-content {
+  width: min(1180px, calc(100% - 48px));
+  margin: 0 auto;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 70px;
+}
+
+.about-text {
+  order: 1;
+}
+
+.about-text h2 {
+  margin: 0 0 22px;
+  color: #0f172a;
+  font-size: clamp(32px, 4vw, 46px);
+  line-height: 1.1;
+  font-weight: 800;
+  letter-spacing: -1.2px;
+}
+
+.about-text h2::after {
+  content: "";
+  display: block;
+  width: 52px;
+  height: 4px;
+  margin-top: 18px;
+  border-radius: 3px;
+  background: #0f8b83;
+}
+
+.about-text p {
+  margin: 0 0 18px;
+  color: #64748b;
+  font-size: 15px;
+  line-height: 1.85;
+  max-width: 560px;
+}
+
+.about-image {
+  order: 2;
+  position: relative;
+}
+
+.about-image::before {
+  content: "";
+  position: absolute;
+  width: 110px;
+  height: 110px;
+  right: -18px;
+  bottom: -18px;
+  border-radius: 18px;
+  background: #dff4f1;
+  z-index: 0;
+}
+
+.about-image img {
+  position: relative;
+  z-index: 1;
+
+  width: 100%;
+  height: 430px;
+
+  display: block;
+
+  object-fit: cover;
+
+  border-radius: 18px;
+
+  box-shadow: 0 22px 55px rgba(15, 23, 42, 0.14);
+}
+
+/* TABLET */
+
+@media (max-width: 850px) {
+  .about {
+    padding: 70px 0;
+  }
+
+  .about-content {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .about-text {
+    order: 1;
+  }
+
+  .about-image {
+    order: 2;
+  }
+
+  .about-image img {
+    height: 360px;
+  }
+}
+
+/* MOBILE */
+
+@media (max-width: 550px) {
+  .about {
+    padding: 55px 0;
+  }
+
+  .about > h1,
+  .about-content {
+    width: calc(100% - 32px);
+  }
+
+  .about > h1 {
+    margin-bottom: 30px;
+  }
+
+  .about-text h2 {
+    font-size: 30px;
+  }
+
+  .about-text p {
+    font-size: 14px;
+  }
+
+  .about-image img {
+    height: 280px;
+  }
+}

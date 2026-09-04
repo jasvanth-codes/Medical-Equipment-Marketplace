@@ -1,0 +1,392 @@
+﻿/* =========================================================
+   MEDEQUIP - PROFESSIONAL HOME PAGE
+   ========================================================= */
+
+.home-page {
+  min-height: 100vh;
+  background: #f7f9fc;
+  color: #172033;
+  overflow-x: hidden;
+}
+
+/* =========================================================
+   COMMON SECTION
+   ========================================================= */
+
+.home-page section {
+  width: 100%;
+}
+
+.home-page h1,
+.home-page h2,
+.home-page h3,
+.home-page p {
+  margin-top: 0;
+}
+
+.home-page a {
+  text-decoration: none;
+}
+
+/* =========================================================
+   PRODUCTS SECTION
+   ========================================================= */
+
+.products-section {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 80px 40px;
+}
+
+.products-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 30px;
+  margin-bottom: 38px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid #e5e9f0;
+}
+
+.products-heading h2,
+.products-heading .section-title {
+  margin: 0;
+  font-size: 36px;
+  font-weight: 800;
+  line-height: 1.15;
+  color: #152238;
+}
+
+.section-label {
+  display: inline-block;
+  margin-bottom: 10px;
+  color: #0b8f87;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.product-count {
+  color: #6b7280;
+  font-size: 15px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* =========================================================
+   PRODUCTS GRID
+   ========================================================= */
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.product-wrapper {
+  min-width: 0;
+}
+
+/* =========================================================
+   PRODUCT CARD
+   ========================================================= */
+
+.product-card {
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #ffffff;
+  border: 1px solid #e8edf3;
+  border-radius: 18px;
+  box-shadow: 0 8px 25px rgba(25, 45, 75, 0.06);
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-6px);
+  border-color: #cfe9e7;
+  box-shadow: 0 18px 40px rgba(25, 45, 75, 0.12);
+}
+
+/* Product image */
+
+.product-card img {
+  width: 100%;
+  height: 230px;
+  display: block;
+  object-fit: cover;
+  background: #f2f5f8;
+  transition: transform 0.35s ease;
+}
+
+.product-card:hover img {
+  transform: scale(1.035);
+}
+
+/* Product info */
+
+.product-info {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 22px;
+}
+
+.product-info h3 {
+  margin: 8px 0 10px;
+  color: #172033;
+  font-size: 19px;
+  font-weight: 750;
+  line-height: 1.35;
+}
+
+.product-info p {
+  margin-bottom: 18px;
+  color: #6b7280;
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.product-category {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  padding: 6px 11px;
+  border-radius: 999px;
+  background: #e9f8f6;
+  color: #087d76;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+}
+
+.product-price {
+  margin-top: auto;
+  color: #102a43;
+  font-size: 22px;
+  font-weight: 800;
+}
+
+/* Product buttons */
+
+.product-card button {
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.add-to-cart-btn {
+  width: calc(100% - 44px);
+  margin: 0 22px 22px;
+  padding: 13px 18px;
+  border-radius: 11px;
+  background: #087f78;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 750;
+  transition: all 0.2s ease;
+}
+
+.add-to-cart-btn:hover {
+  background: #066b65;
+  transform: translateY(-1px);
+}
+
+/* =========================================================
+   PRODUCTS MESSAGE
+   ========================================================= */
+
+.products-message {
+  padding: 60px 30px;
+  text-align: center;
+  color: #6b7280;
+}
+
+.loading-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 220px;
+  color: #087f78;
+  font-weight: 700;
+}
+
+.loading-spinner {
+  width: 25px;
+  height: 25px;
+  border: 3px solid #d7eeec;
+  border-top-color: #087f78;
+  border-radius: 50%;
+  animation: medEquipSpin 0.8s linear infinite;
+}
+
+@keyframes medEquipSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.empty-state {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 45px 25px;
+  border: 1px solid #e7ebf0;
+  border-radius: 18px;
+  background: #ffffff;
+}
+
+.empty-icon {
+  margin-bottom: 15px;
+  font-size: 42px;
+}
+
+.empty-state h3 {
+  margin-bottom: 8px;
+  color: #172033;
+  font-size: 22px;
+}
+
+.empty-state p {
+  margin-bottom: 20px;
+  color: #6b7280;
+}
+
+.reset-products-btn {
+  padding: 11px 20px;
+  border: none;
+  border-radius: 9px;
+  background: #087f78;
+  color: #ffffff;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* =========================================================
+   SEARCH / FILTER AREA
+   ========================================================= */
+
+.home-page input,
+.home-page select {
+  font-family: inherit;
+}
+
+.home-page input:focus,
+.home-page select:focus {
+  outline: none;
+  border-color: #0b8f87;
+  box-shadow: 0 0 0 3px rgba(11, 143, 135, 0.1);
+}
+
+/* =========================================================
+   IMAGE HANDLING
+   ========================================================= */
+
+.home-page img {
+  max-width: 100%;
+}
+
+/* =========================================================
+   LINKS
+   ========================================================= */
+
+.home-page button {
+  font-family: inherit;
+}
+
+/* =========================================================
+   RESPONSIVE - LARGE TABLET
+   ========================================================= */
+
+@media (max-width: 1200px) {
+  .products-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .products-section {
+    padding: 70px 30px;
+  }
+}
+
+/* =========================================================
+   RESPONSIVE - TABLET
+   ========================================================= */
+
+@media (max-width: 900px) {
+  .products-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+  }
+
+  .products-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .products-heading h2,
+  .products-heading .section-title {
+    font-size: 30px;
+  }
+
+  .product-card img {
+    height: 210px;
+  }
+}
+
+/* =========================================================
+   RESPONSIVE - MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+  .products-section {
+    padding: 55px 16px;
+  }
+
+  .products-heading {
+    margin-bottom: 25px;
+    padding-bottom: 16px;
+  }
+
+  .products-heading h2,
+  .products-heading .section-title {
+    font-size: 26px;
+  }
+
+  .products-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .product-card {
+    border-radius: 15px;
+  }
+
+  .product-card img {
+    height: 220px;
+  }
+
+  .product-info {
+    padding: 18px;
+  }
+
+  .product-info h3 {
+    font-size: 18px;
+  }
+
+  .product-price {
+    font-size: 20px;
+  }
+
+  .add-to-cart-btn {
+    width: calc(100% - 36px);
+    margin: 0 18px 18px;
+  }
+}

@@ -1,0 +1,38 @@
+.product-form {
+  width: 100%;
+  background: white;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px,1fr));
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.product-form input {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 15px;
+}
+
+.product-form input:focus {
+  outline: none;
+  border-color: #1565c0;
+}
+
+.product-form button {
+  grid-column: 1 / -1;
+  padding: 12px;
+  background: #1565c0;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.product-form button:hover {
+  background: #0d47a1;
+}
