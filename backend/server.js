@@ -20,9 +20,9 @@ app.use(express.json());
 ========================================= */
 
 const productRoutes = require("./routes/productRoutes");
-const orderRoutes = require("./routes/OrderRoutes");
-const authRoutes = require("./routes/AuthRoutes");
-const adminRoutes = require("./routes/AdminRoutes");
+const orderRoutes = require("./routes/orderRoutes");
+const authRoutes = require("./routes/authRoutes");
+const adminRoutes = require("./routes/adminRoutes");
 
 
 /* =========================================
