@@ -1,176 +1,84 @@
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  FaHeart,
-  FaShoppingCart,
-  FaEye,
-} from "react-icons/fa";
 
 import { CartContext } from "../context/CartContext";
-import { WishlistContext } from "../context/WishlistContext";
 
 import "./ProductCard.css";
 
 function ProductCard({ product }) {
   const navigate = useNavigate();
-
   const { addCart } = useContext(CartContext);
 
-  const {
-    wishlist = [],
-    addWishlist,
-    removeWishlist,
-  } = useContext(WishlistContext);
-
-  if (!product) {
-    return null;
-  }
-
-  const productId = product._id;
-
-  const isWishlisted = wishlist.some(
-    (item) => item._id === productId
-  );
-
-  // =========================
-  // OPEN PRODUCT DETAILS
-  // =========================
-
-  const handleProductClick = () => {
-    if (!productId) {
-      console.error("Product ID is missing:", product);
-      return;
-    }
-
-    navigate(`/products/${productId}`);
+  const openProduct = () => {
+    navigate(`/products/${product._id}`);
   };
-
-  // =========================
-  // ADD TO CART
-  // =========================
 
   const handleAddToCart = (event) => {
     event.stopPropagation();
 
     addCart(product);
-
-    alert(`${product.name} added to cart`);
   };
 
-  // =========================
-  // WISHLIST
-  // =========================
-
-  const handleWishlist = (event) => {
-    event.stopPropagation();
-
-    if (isWishlisted) {
-      removeWishlist(productId);
-    } else {
-      addWishlist(product);
-    }
-  };
-
-  // =========================
-  // VIEW PRODUCT
-  // =========================
-
-  const handleViewProduct = (event) => {
-    event.stopPropagation();
-
-    handleProductClick();
-  };
+  const fallbackImage = "/images/thermometer.jpg";
 
   return (
-    <div className="product-card">
-
-      {/* PRODUCT IMAGE */}
-
-      <div
-        className="product-image-container"
-        onClick={handleProductClick}
-      >
+    <div className="product-card" onClick={openProduct}>
+      {/* Product Image */}
+      <div className="product-image-wrapper">
         <img
-          src={
-            product.image ||
-            "https://via.placeholder.com/400x300?text=Medical+Equipment"
-          }
+          src={product.image || fallbackImage}
           alt={product.name || "Medical Equipment"}
           className="product-image"
+          onError={(event) => {
+            event.currentTarget.onerror = null;
+            event.currentTarget.src = fallbackImage;
+          }}
         />
-
-        {/* WISHLIST BUTTON */}
-
-        <button
-          className={`wishlist-button ${
-            isWishlisted ? "active" : ""
-          }`}
-          onClick={handleWishlist}
-          title={
-            isWishlisted
-              ? "Remove from wishlist"
-              : "Add to wishlist"
-          }
-        >
-          <FaHeart />
-        </button>
-
-        {/* VIEW BUTTON */}
-
-        <button
-          className="quick-view-button"
-          onClick={handleViewProduct}
-          title="View Product"
-        >
-          <FaEye />
-        </button>
       </div>
 
-
-      {/* PRODUCT INFORMATION */}
-
+      {/* Product Information */}
       <div className="product-info">
+        <h2 className="product-name">{product.name}</h2>
 
-        <span className="product-category">
-          {product.category || "Medical Equipment"}
-        </span>
-
-        <h3
-          className="product-name"
-          onClick={handleProductClick}
-        >
-          {product.name}
-        </h3>
-
-        <p className="product-description">
-          {product.description
-            ? product.description.length > 80
-              ? `${product.description.substring(0, 80)}...`
-              : product.description
-            : "Quality medical equipment for healthcare needs."}
-        </p>
-
-
-        {/* PRICE + CART */}
-
-        <div className="product-bottom">
-
-          <div className="product-price">
-            ₹{Number(product.price || 0).toLocaleString("en-IN")}
-          </div>
-
-          <button
-            className="add-cart-button"
-            onClick={handleAddToCart}
-          >
-            <FaShoppingCart />
-            Add to Cart
-          </button>
-
+        <div className="product-price">
+          ₹{Number(product.price || 0).toLocaleString("en-IN")}
         </div>
 
-      </div>
+        <p className="product-category">
+          <strong>Category:</strong>{" "}
+          {product.category || "Medical Equipment"}
+        </p>
 
+        <p className="product-stock">
+          {Number(product.stock || 0) > 0
+            ? `${product.stock} available`
+            : "Out of stock"}
+        </p>
+
+        <div className="product-actions">
+          <button
+            type="button"
+            className="add-cart-btn"
+            onClick={handleAddToCart}
+            disabled={Number(product.stock || 0) <= 0}
+          >
+            {Number(product.stock || 0) > 0
+              ? "Add to Cart"
+              : "Out of Stock"}
+          </button>
+
+          <button
+            type="button"
+            className="view-details-btn"
+            onClick={(event) => {
+              event.stopPropagation();
+              openProduct();
+            }}
+          >
+            View Details →
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
