@@ -43,24 +43,6 @@ function AdminOrders() {
 
       console.log("ADMIN ORDERS RESPONSE:", response.data);
 
-      /*
-        Backend may return:
-
-        1. Array directly
-           [
-             {...},
-             {...}
-           ]
-
-        OR
-
-        2. Object
-           {
-             success: true,
-             orders: [...]
-           }
-      */
-
       if (Array.isArray(response.data)) {
         setOrders(response.data);
       } else if (Array.isArray(response.data.orders)) {
@@ -68,7 +50,6 @@ function AdminOrders() {
       } else {
         setOrders([]);
       }
-
     } catch (error) {
       console.error(
         "FETCH ADMIN ORDERS ERROR:",
@@ -98,10 +79,7 @@ function AdminOrders() {
   // UPDATE ORDER STATUS
   // ==========================================
 
-  const handleStatusChange = async (
-    mongoId,
-    newStatus
-  ) => {
+  const handleStatusChange = async (mongoId, newStatus) => {
     try {
       setUpdatingOrderId(mongoId);
 
@@ -131,7 +109,6 @@ function AdminOrders() {
       alert(
         `Order status updated to ${newStatus}`
       );
-
     } catch (error) {
       console.error(
         "UPDATE STATUS ERROR:",
@@ -299,13 +276,11 @@ function AdminOrders() {
   // ==========================================
 
   const handleViewOrder = (order) => {
-    if (!order.orderId) {
+    if (!order._id) {
       return;
     }
 
-    navigate(
-      `/order-details/${order.orderId}`
-    );
+    navigate(`/orders/${order._id}`);
   };
 
   // ==========================================
@@ -321,7 +296,6 @@ function AdminOrders() {
       <Navbar />
 
       <main className="admin-orders-page">
-
         <div className="admin-orders-container">
 
           {/* =================================
@@ -342,7 +316,6 @@ function AdminOrders() {
           ================================= */}
 
           <div className="admin-orders-header">
-
             <div>
               <span className="admin-orders-label">
                 ADMIN PANEL
@@ -370,7 +343,6 @@ function AdminOrders() {
               </button>
 
               <div className="admin-orders-count">
-
                 <FaShoppingBag />
 
                 <div>
@@ -382,11 +354,9 @@ function AdminOrders() {
                     Total Orders
                   </span>
                 </div>
-
               </div>
 
             </div>
-
           </div>
 
           {/* =================================
@@ -464,7 +434,6 @@ function AdminOrders() {
                     getItemCount(order);
 
                   return (
-
                     <article
                       className="admin-order-card"
                       key={order._id}
@@ -604,98 +573,97 @@ function AdminOrders() {
                           Products Ordered
                         </h3>
 
-                        {(order.items || [])
-                          .map(
-                            (item, index) => (
+                        {(order.items || []).map(
+                          (item, index) => (
 
-                              <div
-                                className="admin-ordered-product"
-                                key={
-                                  item._id ||
-                                  item.product?._id ||
-                                  index
-                                }
-                              >
+                            <div
+                              className="admin-ordered-product"
+                              key={
+                                item._id ||
+                                item.product?._id ||
+                                index
+                              }
+                            >
 
-                                <div className="ordered-product-image">
+                              <div className="ordered-product-image">
 
-                                  {item.image ||
-                                  item.product?.image ? (
-                                    <img
-                                      src={
-                                        item.image ||
-                                        item.product
-                                          ?.image
-                                      }
-                                      alt={
-                                        item.name ||
-                                        item.product
-                                          ?.name ||
-                                        "Product"
-                                      }
-                                    />
-                                  ) : (
-                                    <FaBoxOpen />
-                                  )}
-
-                                </div>
-
-                                <div className="ordered-product-info">
-
-                                  <strong>
-                                    {item.name ||
+                                {item.image ||
+                                item.product?.image ? (
+                                  <img
+                                    src={
+                                      item.image ||
+                                      item.product
+                                        ?.image
+                                    }
+                                    alt={
+                                      item.name ||
                                       item.product
                                         ?.name ||
-                                      "Medical Equipment"}
-                                  </strong>
-
-                                  <span>
-                                    Quantity:{" "}
-                                    {item.quantity ||
-                                      1}
-                                  </span>
-
-                                  <span>
-                                    Price:{" "}
-                                    <FaRupeeSign />
-                                    {Number(
-                                      item.price ||
-                                        item.product
-                                          ?.price ||
-                                        0
-                                    ).toLocaleString(
-                                      "en-IN"
-                                    )}
-                                  </span>
-
-                                </div>
-
-                                <div className="ordered-product-total">
-
-                                  <span>
-                                    Item Total
-                                  </span>
-
-                                  <strong>
-                                    <FaRupeeSign />
-                                    {Number(
-                                      item.price ||
-                                        item.product
-                                          ?.price ||
-                                        0
-                                    ) *
-                                      Number(
-                                        item.quantity ||
-                                          1
-                                      )}
-                                  </strong>
-
-                                </div>
+                                      "Product"
+                                    }
+                                  />
+                                ) : (
+                                  <FaBoxOpen />
+                                )}
 
                               </div>
 
-                            )
-                          )}
+                              <div className="ordered-product-info">
+
+                                <strong>
+                                  {item.name ||
+                                    item.product
+                                      ?.name ||
+                                    "Medical Equipment"}
+                                </strong>
+
+                                <span>
+                                  Quantity:{" "}
+                                  {item.quantity ||
+                                    1}
+                                </span>
+
+                                <span>
+                                  Price:{" "}
+                                  <FaRupeeSign />
+                                  {Number(
+                                    item.price ||
+                                      item.product
+                                        ?.price ||
+                                      0
+                                  ).toLocaleString(
+                                    "en-IN"
+                                  )}
+                                </span>
+
+                              </div>
+
+                              <div className="ordered-product-total">
+
+                                <span>
+                                  Item Total
+                                </span>
+
+                                <strong>
+                                  <FaRupeeSign />
+                                  {Number(
+                                    item.price ||
+                                      item.product
+                                        ?.price ||
+                                      0
+                                  ) *
+                                    Number(
+                                      item.quantity ||
+                                        1
+                                    )}
+                                </strong>
+
+                              </div>
+
+                            </div>
+
+                          )
+                        )}
 
                       </div>
 
@@ -818,16 +786,13 @@ function AdminOrders() {
                       </div>
 
                     </article>
-
                   );
                 })}
 
               </div>
-
             )}
 
         </div>
-
       </main>
 
       <Footer />
