@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 
@@ -42,7 +42,7 @@ function TrackOrder() {
         console.log("TOKEN EXISTS:", !!token);
 
         const response = await axios.get(
-          `http://localhost:5000/api/orders/order/${orderId}`,
+          `https://medical-equipment-marketplace.onrender.com/api/orders/order/${orderId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -332,3 +332,4 @@ function TrackOrder() {
 }
 
 export default TrackOrder;
+

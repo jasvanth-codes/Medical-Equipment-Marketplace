@@ -20,7 +20,7 @@ function ForgotPassword() {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/auth/forgot-password",
+        "https://medical-equipment-marketplace.onrender.com/api/auth/forgot-password",
         { email }
       );
 
@@ -125,3 +125,4 @@ function ForgotPassword() {
 }
 
 export default ForgotPassword;
+

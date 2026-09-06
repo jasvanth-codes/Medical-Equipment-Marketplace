@@ -35,7 +35,7 @@ function ResetPassword() {
       setLoading(true);
 
       const response = await axios.post(
-        `http://localhost:5000/api/auth/reset-password/${token}`,
+        `https://medical-equipment-marketplace.onrender.com/api/auth/reset-password/${token}`,
         {
           password,
         }
@@ -138,3 +138,4 @@ function ResetPassword() {
 }
 
 export default ResetPassword;
+

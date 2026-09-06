@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from "react-router-dom";
+﻿import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState, useContext } from "react";
 import axios from "axios";
 
@@ -26,7 +26,7 @@ function ProductDetails() {
   const fetchProduct = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:5000/api/products/${id}`
+        `https://medical-equipment-marketplace.onrender.com/api/products/${id}`
       );
 
       setProduct(res.data);
@@ -57,7 +57,7 @@ function ProductDetails() {
           className="back-btn"
           onClick={() => navigate(-1)}
         >
-          ← Back
+          â† Back
         </button>
 
         <div className="details-card">
@@ -74,7 +74,7 @@ function ProductDetails() {
 
             <h1>{product.name}</h1>
 
-            <h2>₹{product.price}</h2>
+            <h2>â‚¹{product.price}</h2>
 
             <p>
               <strong>Category :</strong>{" "}
