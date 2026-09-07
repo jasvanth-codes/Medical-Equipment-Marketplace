@@ -1,19 +1,6 @@
 ﻿import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import {
-  FaArrowLeft,
-  FaBox,
-  FaMapMarkerAlt,
-  FaCreditCard,
-  FaTruck,
-  FaCheckCircle,
-  FaTimesCircle,
-} from "react-icons/fa";
-
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
 import API from "../utils/api";
-
 import "./OrderDetails.css";
 
 function OrderDetails() {
@@ -28,18 +15,16 @@ function OrderDetails() {
     const fetchOrder = async () => {
       try {
         setLoading(true);
-        setError("");
 
         const response = await API.get(`/orders/id/${id}`);
 
-        if (response.data?.order) {
-          setOrder(response.data.order);
-        } else {
-          setError("Order details could not be found.");
+        if (!response.data?.order) {
+          throw new Error("Order not found");
         }
+
+        setOrder(response.data.order);
       } catch (err) {
         console.error("Order details error:", err);
-
         setError(
           err.response?.data?.message ||
             "Unable to load order details."
@@ -49,16 +34,11 @@ function OrderDetails() {
       }
     };
 
-    if (id) {
-      fetchOrder();
-    } else {
-      setLoading(false);
-      setError("Invalid order ID.");
-    }
+    fetchOrder();
   }, [id]);
 
   const formatDate = (date) => {
-    if (!date) return "N/A";
+    if (!date) return "—";
 
     return new Date(date).toLocaleDateString("en-IN", {
       day: "2-digit",
@@ -67,389 +47,480 @@ function OrderDetails() {
     });
   };
 
-  const getStatusClass = (status) => {
-    if (!status) return "confirmed";
+  const formatPrice = (value) =>
+    `₹${Number(value || 0).toLocaleString("en-IN")}`;
 
-    return status
+  const getStatusClass = (status) => {
+    const value = String(status || "Confirmed")
       .toLowerCase()
       .replace(/\s+/g, "-");
+
+    return `order-status ${value}`;
   };
+
+  const getProductName = (item) =>
+    item.productName ||
+    item.name ||
+    item.product?.name ||
+    "Medical Equipment";
+
+  const getProductImage = (item) =>
+    item.image ||
+    item.productImage ||
+    item.product?.image ||
+    "https://via.placeholder.com/100x100?text=Product";
+
+  const getProductPrice = (item) =>
+    Number(
+      item.price ??
+        item.productPrice ??
+        item.product?.price ??
+        0
+    );
+
+  const getQuantity = (item) => Number(item.quantity || 1);
 
   if (loading) {
     return (
-      <>
-        <Navbar />
-
-        <main className="order-details-page">
-          <div className="order-details-container">
-            <div className="order-loading">
-              <div className="loading-spinner"></div>
-
-              <h3>Loading order details...</h3>
-
-              <p>
-                Please wait while we fetch your order information.
-              </p>
-            </div>
-          </div>
-        </main>
-
-        <Footer />
-      </>
+      <div className="order-details-page">
+        <div className="order-loading-card">
+          <div className="loading-spinner"></div>
+          <h2>Loading order details</h2>
+          <p>Please wait...</p>
+        </div>
+      </div>
     );
   }
 
   if (error || !order) {
     return (
-      <>
-        <Navbar />
+      <div className="order-details-page">
+        <div className="order-error-card">
+          <div className="error-circle">!</div>
+          <h2>Order Not Found</h2>
+          <p>{error || "This order could not be found."}</p>
 
-        <main className="order-details-page">
-          <div className="order-details-container">
-            <div className="order-error">
-              <FaTimesCircle className="error-icon" />
-
-              <h2>Unable to Load Order</h2>
-
-              <p>{error || "Order not found."}</p>
-
-              <button
-                type="button"
-                className="back-button"
-                onClick={() => navigate("/admin/orders")}
-              >
-                <FaArrowLeft />
-                Back to Orders
-              </button>
-            </div>
-          </div>
-        </main>
-
-        <Footer />
-      </>
+          <button
+            className="back-primary-btn"
+            onClick={() => navigate("/orders")}
+          >
+            ← Back to Orders
+          </button>
+        </div>
+      </div>
     );
   }
 
-  const customer = order.customer || {};
-  const items = order.items || [];
-  const status = order.status || "Confirmed";
+  const items = order.items || order.orderItems || [];
 
-  const totalItems = items.reduce(
-    (total, item) => total + Number(item.quantity || 1),
-    0
+  const subtotal =
+    order.subtotal ??
+    items.reduce(
+      (sum, item) =>
+        sum +
+        getProductPrice(item) * getQuantity(item),
+      0
+    );
+
+  const shipping = Number(
+    order.shippingCost ??
+      order.shipping ??
+      0
   );
 
+  const total =
+    order.totalAmount ??
+    order.total ??
+    subtotal + shipping;
+
+  const customerName =
+    order.customerName ||
+    order.user?.name ||
+    order.name ||
+    "Customer";
+
+  const customerEmail =
+    order.customerEmail ||
+    order.user?.email ||
+    order.email ||
+    "—";
+
+  const customerPhone =
+    order.phone ||
+    order.customerPhone ||
+    order.shippingAddress?.phone ||
+    "—";
+
+  const address =
+    order.shippingAddress ||
+    order.deliveryAddress ||
+    {};
+
+  const addressText =
+    typeof address === "string"
+      ? address
+      : [
+          address.address,
+          address.street,
+          address.addressLine,
+          address.line1,
+        ]
+          .filter(Boolean)
+          .join(", ");
+
+  const city =
+    typeof address === "string"
+      ? order.city
+      : address.city || order.city;
+
+  const state =
+    typeof address === "string"
+      ? order.state
+      : address.state || order.state;
+
+  const pincode =
+    typeof address === "string"
+      ? order.pincode || order.pinCode
+      : address.pincode ||
+        address.pinCode ||
+        address.postalCode ||
+        order.pincode ||
+        order.pinCode;
+
+  const paymentMethod =
+    order.paymentMethod ||
+    order.payment ||
+    "Cash on Delivery";
+
+  const status =
+    order.status || "Confirmed";
+
   return (
-    <>
-      <Navbar />
+    <div className="order-details-page">
+      <div className="order-details-container">
 
-      <main className="order-details-page">
-        <div className="order-details-container">
+        {/* Back */}
+        <button
+          className="back-orders-link"
+          onClick={() => navigate("/orders")}
+        >
+          ← Back to Orders
+        </button>
 
-          <button
-            type="button"
-            className="order-back-button"
-            onClick={() => navigate("/admin/orders")}
-          >
-            <FaArrowLeft />
-            Back to Orders
-          </button>
+        {/* Header */}
+        <div className="order-details-header">
+          <div>
+            <span className="order-label">
+              ORDER DETAILS
+            </span>
 
-          <section className="order-details-header">
-            <div>
-              <span className="section-label">
-                ORDER DETAILS
-              </span>
+            <h1>
+              {order.orderId || order._id}
+            </h1>
 
-              <h1>
-                {order.orderId || "Order"}
-              </h1>
-
-              <p>
+            <div className="order-header-info">
+              <span>
                 Ordered on{" "}
                 <strong>
-                  {formatDate(order.createdAt)}
+                  {formatDate(
+                    order.createdAt ||
+                      order.orderDate
+                  )}
                 </strong>
-              </p>
+              </span>
+
+              <span className="header-separator">
+                •
+              </span>
+
+              <span>
+                {items.length}{" "}
+                {items.length === 1
+                  ? "Item"
+                  : "Items"}
+              </span>
             </div>
-
-            <div
-              className={`order-status-badge ${getStatusClass(status)}`}
-            >
-              {status === "Cancelled" ? (
-                <FaTimesCircle />
-              ) : (
-                <FaCheckCircle />
-              )}
-
-              {status}
-            </div>
-          </section>
-
-          <section className="order-details-card">
-            <div className="order-details-card-header">
-              <div className="order-details-card-icon">
-                <FaMapMarkerAlt />
-              </div>
-
-              <div>
-                <span className="section-label">
-                  CUSTOMER DETAILS
-                </span>
-
-                <h2>Customer Information</h2>
-              </div>
-            </div>
-
-            <div className="customer-details-grid">
-
-              <div className="customer-detail-item">
-                <span>Customer Name</span>
-
-                <strong>
-                  {customer.fullName ||
-                    customer.name ||
-                    "N/A"}
-                </strong>
-              </div>
-
-              <div className="customer-detail-item">
-                <span>Email</span>
-
-                <strong>
-                  {customer.email || "N/A"}
-                </strong>
-              </div>
-
-              <div className="customer-detail-item">
-                <span>Phone</span>
-
-                <strong>
-                  {customer.phone || "N/A"}
-                </strong>
-              </div>
-
-              <div className="customer-detail-item">
-                <span>Delivery Address</span>
-
-                <strong>
-                  {customer.address || "N/A"}
-                </strong>
-              </div>
-
-              <div className="customer-detail-item">
-                <span>City</span>
-
-                <strong>
-                  {customer.city || "N/A"}
-                </strong>
-              </div>
-
-              <div className="customer-detail-item">
-                <span>State</span>
-
-                <strong>
-                  {customer.state || "N/A"}
-                </strong>
-              </div>
-
-              <div className="customer-detail-item">
-                <span>PIN Code</span>
-
-                <strong>
-                  {customer.pincode ||
-                    customer.pinCode ||
-                    "N/A"}
-                </strong>
-              </div>
-
-            </div>
-          </section>
-
-          <section className="order-details-card">
-
-            <div className="order-details-card-header">
-              <div className="order-details-card-icon">
-                <FaBox />
-              </div>
-
-              <div>
-                <span className="section-label">
-                  PRODUCTS ORDERED
-                </span>
-
-                <h2>Order Items</h2>
-              </div>
-            </div>
-
-            <div className="order-items-list">
-
-              {items.length > 0 ? (
-                items.map((item, index) => {
-                  const quantity =
-                    Number(item.quantity || 1);
-
-                  const price =
-                    Number(item.price || 0);
-
-                  const itemTotal =
-                    price * quantity;
-
-                  return (
-                    <div
-                      className="order-item"
-                      key={item._id || index}
-                    >
-
-                      <div className="order-item-image">
-                        {item.image ? (
-                          <img
-                            src={item.image}
-                            alt={
-                              item.name ||
-                              "Medical Equipment"
-                            }
-                            onError={(event) => {
-                              event.currentTarget.style.display =
-                                "none";
-                            }}
-                          />
-                        ) : (
-                          <FaBox />
-                        )}
-                      </div>
-
-                      <div className="order-item-info">
-                        <h3>
-                          {item.name ||
-                            item.productName ||
-                            "Medical Equipment"}
-                        </h3>
-
-                        <p>
-                          Quantity:{" "}
-                          <strong>
-                            {quantity}
-                          </strong>
-                        </p>
-                      </div>
-
-                      <div className="order-item-price">
-                        <span>
-                          ₹{price.toLocaleString("en-IN")}
-                        </span>
-
-                        <strong>
-                          ₹{itemTotal.toLocaleString("en-IN")}
-                        </strong>
-                      </div>
-
-                    </div>
-                  );
-                })
-              ) : (
-                <p className="no-order-items">
-                  No products found for this order.
-                </p>
-              )}
-
-            </div>
-
-            <div className="order-summary">
-
-              <div>
-                <span>Total Items</span>
-
-                <strong>
-                  {totalItems}
-                </strong>
-              </div>
-
-              <div>
-                <span>Total Amount</span>
-
-                <strong className="order-total-amount">
-                  ₹
-                  {Number(
-                    order.total || 0
-                  ).toLocaleString("en-IN")}
-                </strong>
-              </div>
-
-            </div>
-          </section>
-
-          <section className="order-details-card">
-
-            <div className="order-details-card-header">
-              <div className="order-details-card-icon">
-                <FaCreditCard />
-              </div>
-
-              <div>
-                <span className="section-label">
-                  PAYMENT
-                </span>
-
-                <h2>Payment Information</h2>
-              </div>
-            </div>
-
-            <div className="payment-information">
-
-              <div>
-                <span>Payment Method</span>
-
-                <strong>
-                  {order.paymentMethod ||
-                    order.paymentType ||
-                    "Cash on Delivery"}
-                </strong>
-              </div>
-
-              <div>
-                <span>Payment Status</span>
-
-                <strong>
-                  {order.paymentStatus ||
-                    "Pending"}
-                </strong>
-              </div>
-
-            </div>
-          </section>
-
-          <div className="order-details-actions">
-
-            <button
-              type="button"
-              className="secondary-action-button"
-              onClick={() =>
-                navigate(`/orders/${order._id}/track`)
-              }
-            >
-              <FaTruck />
-              Track Order
-            </button>
-
-            <button
-              type="button"
-              className="primary-action-button"
-              onClick={() =>
-                navigate("/admin/orders")
-              }
-            >
-              <FaArrowLeft />
-              Back to Manage Orders
-            </button>
-
           </div>
 
+          <span className={getStatusClass(status)}>
+            <span className="status-dot"></span>
+            {status}
+          </span>
         </div>
-      </main>
 
-      <Footer />
-    </>
+        {/* Main layout */}
+        <div className="order-details-grid">
+
+          {/* LEFT */}
+          <div className="order-details-left">
+
+            {/* Customer */}
+            <section className="order-card">
+              <div className="card-heading">
+                <div className="card-heading-icon">
+                  👤
+                </div>
+
+                <div>
+                  <span className="card-label">
+                    CUSTOMER
+                  </span>
+                  <h2>Customer Information</h2>
+                </div>
+              </div>
+
+              <div className="customer-grid">
+
+                <div className="customer-info-box">
+                  <span>Full Name</span>
+                  <strong>{customerName}</strong>
+                </div>
+
+                <div className="customer-info-box">
+                  <span>Email Address</span>
+                  <strong>{customerEmail}</strong>
+                </div>
+
+                <div className="customer-info-box">
+                  <span>Phone Number</span>
+                  <strong>{customerPhone}</strong>
+                </div>
+
+              </div>
+            </section>
+
+            {/* Address */}
+            <section className="order-card">
+              <div className="card-heading">
+                <div className="card-heading-icon address">
+                  📍
+                </div>
+
+                <div>
+                  <span className="card-label">
+                    DELIVERY
+                  </span>
+                  <h2>Delivery Address</h2>
+                </div>
+              </div>
+
+              <div className="address-container">
+                <strong>{customerName}</strong>
+
+                <p>
+                  {addressText ||
+                    "Address not available"}
+                </p>
+
+                {(city || state || pincode) && (
+                  <p>
+                    {[city, state]
+                      .filter(Boolean)
+                      .join(", ")}
+                    {pincode
+                      ? ` - ${pincode}`
+                      : ""}
+                  </p>
+                )}
+
+                <div className="address-phone">
+                  ☎ {customerPhone}
+                </div>
+              </div>
+            </section>
+
+            {/* Products */}
+            <section className="order-card">
+              <div className="card-heading">
+                <div className="card-heading-icon product">
+                  🛒
+                </div>
+
+                <div>
+                  <span className="card-label">
+                    PRODUCTS
+                  </span>
+                  <h2>Order Items</h2>
+                </div>
+              </div>
+
+              <div className="order-items">
+
+                {items.length === 0 ? (
+                  <div className="no-items">
+                    No products found.
+                  </div>
+                ) : (
+                  items.map((item, index) => {
+                    const price =
+                      getProductPrice(item);
+
+                    const quantity =
+                      getQuantity(item);
+
+                    return (
+                      <div
+                        className="order-product"
+                        key={
+                          item._id || index
+                        }
+                      >
+                        <div className="product-image-box">
+                          <img
+                            src={getProductImage(item)}
+                            alt={getProductName(item)}
+                            onError={(event) => {
+                              event.currentTarget.src =
+                                "https://via.placeholder.com/100x100?text=Product";
+                            }}
+                          />
+                        </div>
+
+                        <div className="order-product-info">
+                          <h3>
+                            {getProductName(item)}
+                          </h3>
+
+                          <p>
+                            Quantity:{" "}
+                            <strong>
+                              {quantity}
+                            </strong>
+                          </p>
+
+                          <p>
+                            Unit Price:{" "}
+                            <strong>
+                              {formatPrice(price)}
+                            </strong>
+                          </p>
+                        </div>
+
+                        <div className="order-product-total">
+                          {formatPrice(
+                            price * quantity
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })
+                )}
+
+              </div>
+            </section>
+          </div>
+
+          {/* RIGHT */}
+          <div className="order-details-right">
+
+            {/* Summary */}
+            <section className="summary-card">
+              <span className="card-label">
+                ORDER SUMMARY
+              </span>
+
+              <h2>Payment Summary</h2>
+
+              <div className="summary-row">
+                <span>Subtotal</span>
+                <strong>
+                  {formatPrice(subtotal)}
+                </strong>
+              </div>
+
+              <div className="summary-row">
+                <span>Shipping</span>
+                <strong>
+                  {shipping === 0
+                    ? "FREE"
+                    : formatPrice(shipping)}
+                </strong>
+              </div>
+
+              <div className="summary-divider"></div>
+
+              <div className="summary-total">
+                <span>Total</span>
+                <strong>
+                  {formatPrice(total)}
+                </strong>
+              </div>
+            </section>
+
+            {/* Payment */}
+            <section className="payment-card">
+              <span className="card-label">
+                PAYMENT
+              </span>
+
+              <h2>Payment Information</h2>
+
+              <div className="payment-method-box">
+                <div className="payment-method-icon">
+                  💳
+                </div>
+
+                <div>
+                  <span>Payment Method</span>
+                  <strong>
+                    {paymentMethod}
+                  </strong>
+                </div>
+              </div>
+
+              <div className="payment-recorded">
+                <span>✓</span>
+                <p>
+                  {String(status).toLowerCase() ===
+                  "cancelled"
+                    ? "Order has been cancelled"
+                    : "Payment information recorded"}
+                </p>
+              </div>
+            </section>
+
+            {/* Actions */}
+            <section className="order-actions-card">
+
+              {String(status).toLowerCase() !==
+                "cancelled" && (
+                <button
+                  className="track-order-btn"
+                  onClick={() =>
+                    navigate(
+                      `/orders/${order._id}/track`
+                    )
+                  }
+                >
+                  📦
+                  <span>Track Order</span>
+                  <b>→</b>
+                </button>
+              )}
+
+              <button
+                className="view-orders-btn"
+                onClick={() =>
+                  navigate("/orders")
+                }
+              >
+                ← View All Orders
+              </button>
+
+            </section>
+
+            {/* Reference */}
+            <div className="order-reference-box">
+              <span>ORDER REFERENCE</span>
+              <strong>
+                {order.orderId || order._id}
+              </strong>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 
