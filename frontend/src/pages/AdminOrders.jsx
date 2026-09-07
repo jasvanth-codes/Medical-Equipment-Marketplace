@@ -19,7 +19,6 @@ import {
 
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-
 import API from "../utils/api";
 
 import "./AdminOrders.css";
@@ -45,7 +44,7 @@ function AdminOrders() {
 
       if (Array.isArray(response.data)) {
         setOrders(response.data);
-      } else if (Array.isArray(response.data.orders)) {
+      } else if (Array.isArray(response.data?.orders)) {
         setOrders(response.data.orders);
       } else {
         setOrders([]);
@@ -96,7 +95,7 @@ function AdminOrders() {
       );
 
       const updatedOrder =
-        response.data.order || response.data;
+        response.data?.order || response.data;
 
       setOrders((previousOrders) =>
         previousOrders.map((order) =>
@@ -192,7 +191,7 @@ function AdminOrders() {
   };
 
   // ==========================================
-  // GET CUSTOMER NAME
+  // CUSTOMER NAME
   // ==========================================
 
   const getCustomerName = (order) => {
@@ -206,7 +205,7 @@ function AdminOrders() {
   };
 
   // ==========================================
-  // GET CUSTOMER EMAIL
+  // CUSTOMER EMAIL
   // ==========================================
 
   const getCustomerEmail = (order) => {
@@ -219,7 +218,7 @@ function AdminOrders() {
   };
 
   // ==========================================
-  // GET CUSTOMER PHONE
+  // CUSTOMER PHONE
   // ==========================================
 
   const getCustomerPhone = (order) => {
@@ -232,7 +231,7 @@ function AdminOrders() {
   };
 
   // ==========================================
-  // GET ADDRESS
+  // CUSTOMER ADDRESS
   // ==========================================
 
   const getCustomerAddress = (order) => {
@@ -260,7 +259,7 @@ function AdminOrders() {
   };
 
   // ==========================================
-  // GET ITEM COUNT
+  // ITEM COUNT
   // ==========================================
 
   const getItemCount = (order) => {
@@ -272,13 +271,24 @@ function AdminOrders() {
   };
 
   // ==========================================
-  // VIEW ORDER
+  // VIEW FULL ORDER
   // ==========================================
 
   const handleViewOrder = (order) => {
-    if (!order._id) {
+    if (!order?._id) {
+      console.error(
+        "Cannot open order: MongoDB _id is missing.",
+        order
+      );
+
+      alert("Order ID is missing.");
       return;
     }
+
+    console.log(
+      "OPENING FULL ORDER:",
+      order._id
+    );
 
     navigate(`/orders/${order._id}`);
   };
@@ -298,9 +308,7 @@ function AdminOrders() {
       <main className="admin-orders-page">
         <div className="admin-orders-container">
 
-          {/* =================================
-              BACK
-          ================================= */}
+          {/* BACK */}
 
           <button
             type="button"
@@ -311,17 +319,18 @@ function AdminOrders() {
             Back to Dashboard
           </button>
 
-          {/* =================================
-              HEADER
-          ================================= */}
+          {/* HEADER */}
 
           <div className="admin-orders-header">
+
             <div>
               <span className="admin-orders-label">
                 ADMIN PANEL
               </span>
 
-              <h1>Manage Orders</h1>
+              <h1>
+                Manage Orders
+              </h1>
 
               <p>
                 View customers who ordered your
@@ -343,6 +352,7 @@ function AdminOrders() {
               </button>
 
               <div className="admin-orders-count">
+
                 <FaShoppingBag />
 
                 <div>
@@ -354,14 +364,14 @@ function AdminOrders() {
                     Total Orders
                   </span>
                 </div>
+
               </div>
 
             </div>
+
           </div>
 
-          {/* =================================
-              LOADING
-          ================================= */}
+          {/* LOADING */}
 
           {loading && (
             <div className="admin-orders-empty">
@@ -380,9 +390,7 @@ function AdminOrders() {
             </div>
           )}
 
-          {/* =================================
-              NO ORDERS
-          ================================= */}
+          {/* NO ORDERS */}
 
           {!loading &&
             orders.length === 0 && (
@@ -403,9 +411,7 @@ function AdminOrders() {
               </div>
             )}
 
-          {/* =================================
-              ORDERS
-          ================================= */}
+          {/* ORDERS */}
 
           {!loading &&
             orders.length > 0 && (
@@ -439,9 +445,7 @@ function AdminOrders() {
                       key={order._id}
                     >
 
-                      {/* =========================
-                          ORDER HEADER
-                      ========================= */}
+                      {/* ORDER HEADER */}
 
                       <div className="admin-order-top">
 
@@ -472,18 +476,18 @@ function AdminOrders() {
                             status
                           )}`}
                         >
+
                           {getStatusIcon(status)}
 
                           <span>
                             {status}
                           </span>
+
                         </div>
 
                       </div>
 
-                      {/* =========================
-                          CUSTOMER DETAILS
-                      ========================= */}
+                      {/* CUSTOMER DETAILS */}
 
                       <div className="admin-customer-section">
 
@@ -499,6 +503,7 @@ function AdminOrders() {
                             <FaUser />
 
                             <div>
+
                               <span>
                                 Customer Name
                               </span>
@@ -506,6 +511,7 @@ function AdminOrders() {
                               <strong>
                                 {customerName}
                               </strong>
+
                             </div>
 
                           </div>
@@ -515,6 +521,7 @@ function AdminOrders() {
                             <FaEnvelope />
 
                             <div>
+
                               <span>
                                 Email
                               </span>
@@ -522,6 +529,7 @@ function AdminOrders() {
                               <strong>
                                 {customerEmail}
                               </strong>
+
                             </div>
 
                           </div>
@@ -531,6 +539,7 @@ function AdminOrders() {
                             <FaPhone />
 
                             <div>
+
                               <span>
                                 Phone
                               </span>
@@ -538,6 +547,7 @@ function AdminOrders() {
                               <strong>
                                 {customerPhone}
                               </strong>
+
                             </div>
 
                           </div>
@@ -547,6 +557,7 @@ function AdminOrders() {
                             <FaMapMarkerAlt />
 
                             <div>
+
                               <span>
                                 Delivery Address
                               </span>
@@ -554,6 +565,7 @@ function AdminOrders() {
                               <strong>
                                 {customerAddress}
                               </strong>
+
                             </div>
 
                           </div>
@@ -562,9 +574,7 @@ function AdminOrders() {
 
                       </div>
 
-                      {/* =========================
-                          PRODUCTS ORDERED
-                      ========================= */}
+                      {/* PRODUCTS */}
 
                       <div className="admin-ordered-products">
 
@@ -574,102 +584,100 @@ function AdminOrders() {
                         </h3>
 
                         {(order.items || []).map(
-                          (item, index) => (
+                          (item, index) => {
 
-                            <div
-                              className="admin-ordered-product"
-                              key={
-                                item._id ||
-                                item.product?._id ||
-                                index
-                              }
-                            >
+                            const quantity =
+                              Number(
+                                item.quantity || 1
+                              );
 
-                              <div className="ordered-product-image">
+                            const price =
+                              Number(
+                                item.price ||
+                                  item.product?.price ||
+                                  0
+                              );
 
-                                {item.image ||
-                                item.product?.image ? (
-                                  <img
-                                    src={
-                                      item.image ||
-                                      item.product
-                                        ?.image
-                                    }
-                                    alt={
-                                      item.name ||
-                                      item.product
-                                        ?.name ||
-                                      "Product"
-                                    }
-                                  />
-                                ) : (
-                                  <FaBoxOpen />
-                                )}
+                            const itemTotal =
+                              price * quantity;
 
-                              </div>
+                            return (
+                              <div
+                                className="admin-ordered-product"
+                                key={
+                                  item._id ||
+                                  item.product?._id ||
+                                  index
+                                }
+                              >
 
-                              <div className="ordered-product-info">
+                                <div className="ordered-product-image">
 
-                                <strong>
-                                  {item.name ||
-                                    item.product
-                                      ?.name ||
-                                    "Medical Equipment"}
-                                </strong>
-
-                                <span>
-                                  Quantity:{" "}
-                                  {item.quantity ||
-                                    1}
-                                </span>
-
-                                <span>
-                                  Price:{" "}
-                                  <FaRupeeSign />
-                                  {Number(
-                                    item.price ||
-                                      item.product
-                                        ?.price ||
-                                      0
-                                  ).toLocaleString(
-                                    "en-IN"
+                                  {item.image ||
+                                  item.product?.image ? (
+                                    <img
+                                      src={
+                                        item.image ||
+                                        item.product?.image
+                                      }
+                                      alt={
+                                        item.name ||
+                                        item.product?.name ||
+                                        "Product"
+                                      }
+                                    />
+                                  ) : (
+                                    <FaBoxOpen />
                                   )}
-                                </span>
 
-                              </div>
+                                </div>
 
-                              <div className="ordered-product-total">
+                                <div className="ordered-product-info">
 
-                                <span>
-                                  Item Total
-                                </span>
+                                  <strong>
+                                    {item.name ||
+                                      item.product?.name ||
+                                      "Medical Equipment"}
+                                  </strong>
 
-                                <strong>
-                                  <FaRupeeSign />
-                                  {Number(
-                                    item.price ||
-                                      item.product
-                                        ?.price ||
-                                      0
-                                  ) *
-                                    Number(
-                                      item.quantity ||
-                                        1
+                                  <span>
+                                    Quantity:{" "}
+                                    {quantity}
+                                  </span>
+
+                                  <span>
+                                    Price:{" "}
+                                    <FaRupeeSign />
+                                    {price.toLocaleString(
+                                      "en-IN"
                                     )}
-                                </strong>
+                                  </span>
+
+                                </div>
+
+                                <div className="ordered-product-total">
+
+                                  <span>
+                                    Item Total
+                                  </span>
+
+                                  <strong>
+                                    <FaRupeeSign />
+                                    {itemTotal.toLocaleString(
+                                      "en-IN"
+                                    )}
+                                  </strong>
+
+                                </div>
 
                               </div>
-
-                            </div>
-
-                          )
+                            );
+                          }
                         )}
 
                       </div>
 
-                      {/* =========================
-                          ORDER SUMMARY
-                      ========================= */}
+                      {/* ORDER SUMMARY */}
 
                       <div className="admin-order-info">
 
@@ -710,6 +718,7 @@ function AdminOrders() {
 
                           <strong>
                             {order.paymentMethod ||
+                              order.paymentType ||
                               "Cash on Delivery"}
                           </strong>
 
@@ -717,9 +726,7 @@ function AdminOrders() {
 
                       </div>
 
-                      {/* =========================
-                          ACTIONS
-                      ========================= */}
+                      {/* ACTIONS */}
 
                       <div className="admin-order-actions">
 
