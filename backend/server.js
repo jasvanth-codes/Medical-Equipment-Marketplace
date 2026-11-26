@@ -23,6 +23,12 @@ const productRoutes = require("./routes/productRoutes");
 const orderRoutes = require("./routes/orderRoutes");
 const authRoutes = require("./routes/authRoutes");
 const adminRoutes = require("./routes/adminRoutes");
+const cartRoutes = require("./routes/cartRoutes");
+const wishlistRoutes = require("./routes/wishlistRoutes");
+const categoryRoutes = require("./routes/categoryRoutes");
+const searchRoutes = require("./routes/searchRoutes");
+const reviewRoutes = require("./routes/reviewRoutes");
+const userRoutes = require("./routes/userRoutes");
 
 
 /* =========================================
@@ -36,6 +42,18 @@ app.use("/api/orders", orderRoutes);
 app.use("/api/auth", authRoutes);
 
 app.use("/api/admin", adminRoutes);
+
+app.use("/api/cart", cartRoutes);
+
+app.use("/api/wishlist", wishlistRoutes);
+
+app.use("/api/categories", categoryRoutes);
+
+app.use("/api/search", searchRoutes);
+
+app.use("/api/reviews", reviewRoutes);
+
+app.use("/api/user", userRoutes);
 
 
 /* =========================================

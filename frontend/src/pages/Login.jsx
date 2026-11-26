@@ -1,7 +1,7 @@
 ﻿import { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
-import axios from "axios";
+import API from "../utils/api";
 import "./Login.css";
 
 function Login() {
@@ -20,13 +20,10 @@ function Login() {
     setLoading(true);
 
     try {
-      const response = await axios.post(
-        "https://medical-equipment-marketplace.onrender.com/api/auth/login",
-        {
-          email,
-          password,
-        }
-      );
+      const response = await API.post("/auth/login", {
+        email,
+        password,
+      });
 
       const data = response.data;
 

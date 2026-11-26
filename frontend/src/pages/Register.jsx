@@ -1,6 +1,6 @@
 ﻿import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import API from "../utils/api";
 import "./Register.css";
 
 function Register() {
@@ -39,14 +39,11 @@ function Register() {
     }
 
     try {
-      const res = await axios.post(
-        "https://medical-equipment-marketplace.onrender.com/api/auth/register",
-        {
-          name: user.name,
-          email: user.email,
-          password: user.password,
-        }
-      );
+      const res = await API.post("/auth/register", {
+        name: user.name,
+        email: user.email,
+        password: user.password,
+      });
 
       alert("Registration Successful");
 
